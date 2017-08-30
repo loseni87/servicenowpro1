@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Webservice integration</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="snow.js"></script>
+  <script type="text/javascript">
+
+  function createIncident(){
+    var incidentCaller = document.getElementById("caller").value;
+    var incidentAssignedTo= document.getElementById("assignedto").value;
+    var incidentShortDescription = document.getElementById("shortdescription").value;
+    var incidentDescription = document.getElementById("description").value;
+
+    var requestBody = "{\"caller\":\"" + incidentCaller + "\", \"assigned_to\":\"" + incidentAssignedTo + "\", \"short_description\":\"" + incidentShortDescription + "\", \"incidentDescription\":\"" + description + "\"}";
+
+    var client=new XMLHttpRequest();
+    client.open("post","https://dev42667.service-now.com/api/now/table/incident");
+
+    client.setRequestHeader('Accept','application/json');
+    client.setRequestHeader('Content-Type','application/json');
+
+    //Eg. UserName="admin", Password="admin" for this code sample.
+    client.setRequestHeader('Authorization', 'Basic '+btoa('admin'+':'+'King1859371017011920!'));
+
+    client.onreadystatechange = function() {
+      if(this.readyState == this.DONE) {
+        var res = this.response;
+        parsedData = JSON.parse(res);
+        alert("You have successfully created an Incident with number:" + parsedData.result.number);
+      }
+    };
+    client.send(requestBody);
+  }
+
+  </script>
+
+</head>
+
+<body>
+
+<div class="container">
+		<h2 class="text-center">Create Incident</h2>
+		<div class="errors">
+		</div>
+			<form class="contact-form">
+				<div class="form-group">
+				<input type="text" id="caller" class="caller form-control" placeholder="Caller" value="">
+				<i class="fa fa-user"></i>
+				<span class="asterix">*</span>
+				<span class="cross">x</span>
+				<span class="verify"><i class="fa fa-check" aria-hidden="true"></i></span>
+				<div class="alert alert-danger custom-alert">
+					Caller must be more than 3 letter
+				</div>
+				</div>
+
+
+				<div class="form-group">
+				<input type="text" id="assignedto" class="contact form-control" placeholder="Assigned To" value="">
+				<i class="fa fa-envelope"></i>
+				<span class="asterix">*</span>
+				<span class="cross">x</span>
+				<span class="verify"><i class="fa fa-check" aria-hidden="true"></i></span>
+				<div class="alert alert-danger custom-alert">
+					Contact type can not be empty
+				</div>
+				</div>
+
+
+				<div class="form-group">
+				<input type="text" id="shortdescription" class="shortdescription form-control" placeholder="Short Description" value="">
+				<i class="fa fa-pencil"></i>
+				<span class="asterix">*</span>
+				<span class="cross">x</span>
+				<span class="verify"><i class="fa fa-check" aria-hidden="true"></i></span>
+				<div class="alert alert-danger custom-alert">
+					Short Description
+				</div>
+				</div>
+
+
+				<div class="form-group">
+				<textarea class="description form-control" id="description" placeholder="Description"></textarea>
+				<i class="fa fa-comments message-icon"></i>
+				<span class="asterix">*</span>
+				<span class="cross">x</span>
+				<span class="verify"><i class="fa fa-check" aria-hidden="true"></i></span>
+				<div class="alert alert-danger custom-alert">
+					Description should be more than <b>10</b> characteres
+				</div>
+				</div>
+
+				<div class="form-group">
+				<input type="submit" value="send" class="btn btn-success btn-block" onclick="createIncident()"/>
+				<i class="fa fa-paper-plane send-icon"></i>
+				</div>
+			</form>
+		</div>
+</body>
+</html>
